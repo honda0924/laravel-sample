@@ -14,17 +14,28 @@ class TaskTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        Task::factory()->count(10)->create();
     }
     /**
      * @test
      */
     public function getList()
     {
-        $tasks = Task::factory()->count(10)->create();
-
+        $tasks = Task::all();
         $response = $this->getJson('api/tasks');
 
         $response->assertOk()
             ->assertJsonCount($tasks->count());
+    }
+
+    /**
+     * @test
+     */
+    public function getDetail()
+    {
+        $task = Task::all()->first();
+        $response = $this->getJson('api/tasks/' . $task->id);
+
+        $response->assertOk();
     }
 }
