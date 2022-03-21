@@ -15,12 +15,13 @@ class TaskSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 1; $i <= 10; $i++) {
-            Task::create([
-                'title' => 'title' . $i,
-                'content' => 'content' . $i,
-                'person_in_charge' => 'person_in_charge' . $i,
-            ]);
-        }
+        // for ($i = 1; $i <= 10; $i++) {
+        //     Task::create([
+        //         'title' => 'title' . $i,
+        //         'content' => 'content' . $i,
+        //         'person_in_charge' => 'person_in_charge' . $i,
+        //     ]);
+        // }
+        $tasks = Task::factory()->count(10)->create();
     }
 }
