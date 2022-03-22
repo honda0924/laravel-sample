@@ -282,4 +282,19 @@ class TaskTest extends TestCase
                 'person_in_charge' => '最大文字数を超えています。'
             ]);
     }
+
+    /**
+     * @test
+     */
+    public function successDelete()
+    {
+        $tasks = Task::factory()->count(10)->create();
+        $row = Task::all()->count();
+
+        $response = $this->deleteJson("api/tasks/{$tasks[0]->id}/delete");
+        $response->assertOk();
+
+        $response = $this->getJson('api/tasks');
+        $response->assertJsonCount($row - 1);
+    }
 }
