@@ -157,4 +157,129 @@ class TaskTest extends TestCase
                 'person_in_charge' => '最大文字数を超えています。'
             ]);
     }
+
+    /**
+     * @test
+     */
+    public function successUpdate()
+    {
+        $task = Task::factory()->create();
+        $data = [
+            'title' => 'テストタイトル',
+            'content' => 'これはテストです',
+            'person_in_charge' => 'テスト担当者'
+        ];
+        $response = $this->putJson('api/tasks/' . $task->id . '/update', $data);
+
+        $response->assertStatus(200)
+            ->assertJsonFragment($data);
+    }
+
+    /**
+     * @test
+     */
+    public function failNoTitleUpdate()
+    {
+        $task = Task::factory()->create();
+        $data = [
+            'title' => '',
+            'content' => 'これはテストです',
+            'person_in_charge' => 'テスト担当者'
+        ];
+        $response = $this->putJson('api/tasks/' . $task->id . '/update', $data);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'title' => '必須項目です。'
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function failNoContentUpdate()
+    {
+        $task = Task::factory()->create();
+        $data = [
+            'title' => 'テストタイトル',
+            'content' => '',
+            'person_in_charge' => 'テスト担当者'
+        ];
+        $response = $this->putJson('api/tasks/' . $task->id . '/update', $data);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'content' => '必須項目です。'
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function failNoPersonInChargeUpdate()
+    {
+        $task = Task::factory()->create();
+        $data = [
+            'title' => 'テストタイトル',
+            'content' => 'これはテストです',
+            'person_in_charge' => ''
+        ];
+        $response = $this->putJson('api/tasks/' . $task->id . '/update', $data);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'person_in_charge' => '必須項目です。'
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function failMaxCharOverTitleUpdate()
+    {
+        $task = Task::factory()->create();
+        $data = [
+            'title' => str_repeat('あ', 101),
+            'content' => 'これはテストです',
+            'person_in_charge' => 'テスト担当者'
+        ];
+        $response = $this->putJson('api/tasks/' . $task->id . '/update', $data);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'title' => '最大文字数を超えています。'
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function failMaxCharOverContentUpdate()
+    {
+        $task = Task::factory()->create();
+        $data = [
+            'title' => 'テストタイトル',
+            'content' => str_repeat('あ', 101),
+            'person_in_charge' => 'テスト担当者'
+        ];
+        $response = $this->putJson('api/tasks/' . $task->id . '/update', $data);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'content' => '最大文字数を超えています。'
+            ]);
+    }
+
+    /**
+     * @test
+     */
+    public function failMaxCharOverPersonInChargeUpdate()
+    {
+        $task = Task::factory()->create();
+        $data = [
+            'title' => 'テストタイトル',
+            'content' => 'これはテストです',
+            'person_in_charge' => str_repeat('あ', 101)
+        ];
+        $response = $this->putJson('api/tasks/' . $task->id . '/update', $data);
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'person_in_charge' => '最大文字数を超えています。'
+            ]);
+    }
 }
