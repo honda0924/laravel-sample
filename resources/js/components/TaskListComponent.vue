@@ -46,7 +46,7 @@
         },
         methods: {
             getTasks(){
-                axios.get('api/tasks')
+                axios.get('/api/tasks')
                     .then((res) => {
                         this.tasks = res.data;
                     });
