@@ -23,6 +23,7 @@ class TaskController extends Controller
     }
     public function update(TaskUpdateRequest $request, Task $task)
     {
+        \Log::info($task);
         $task->update($request->all());
         return $task;
     }
